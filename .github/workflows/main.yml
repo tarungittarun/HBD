@@ -1,1 +1,34 @@
-./index.html
+name: Deploy Static Site
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Optional, only if you need Node.js for any build step
+
+      - name: Install Dependencies (if any)
+        run: npm install  # Modify this if you have specific dependencies
+
+      - name: Run Linter (Optional)
+        run: npx htmlhint index.html  # Optional step to lint your HTML (requires `htmlhint`)
+
+      - name: Deploy to GitHub Pages (Optional)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./HBD/  # Directory containing your static files
